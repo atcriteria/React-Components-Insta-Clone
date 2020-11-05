@@ -5,15 +5,25 @@
 */
 
 // Import the state hook
-import React from 'react';
+import React, { useState } from 'react';
 // Import the Posts (plural!) and SearchBar components, since they are used inside App component
 // Import the dummyData
 import './App.css';
+import Post from './components/Posts/Post';
+import Posts from './components/Posts/Posts';
+import './components/SearchBar/SearchBar';
+import SearchBar from './components/SearchBar/SearchBar';
+import './dummy-data';
+import dummyData from './dummy-data';
+import Comments from './components/Comments/Comments';
+
 
 const App = () => {
   // Create a state called `posts` to hold the array of post objects, **initializing to dummyData**.
   // This state is the source of truth for the data inside the app. You won't be needing dummyData anymore.
   // To make the search bar work (which is stretch) we'd need another state to hold the search term.
+
+const [posts, setPosts] = useState(dummyData);
 
   const likePost = postId => {
     /*
@@ -27,11 +37,21 @@ const App = () => {
         - if the `id` of the post matches `postId`, return a new post object with the desired values (use the spread operator).
         - otherwise just return the post object unchanged.
      */
+    setPosts(posts.map((post) => {
+      if (post.id === postId){
+        let newNum = post.likes + 1;
+        return { ... post, likes: newNum }
+      } else {
+        return post;
+      }
+      // return (post.id === postId) ? {...post, id: post.id++} : post;
+    }));
   };
-
   return (
     <div className='App'>
-      {/* Add SearchBar and Posts here to render them */}
+      {/* {SearchBar()} {Posts()} */}
+      <SearchBar />
+      <Posts likePost = {likePost} post = {posts}/>
       {/* Check the implementation of each component, to see what props they require, if any! */}
     </div>
   );
